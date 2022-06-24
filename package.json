@@ -32,5 +32,8 @@
   "exports": {
     "acalaEvm": "./node_modules/@subql/acala-evm-processor/dist/index.js",
     "chaintypes": "./src/chaintypes.ts"
+  },
+  "resolutions": {
+    "ipfs-unixfs": "6.0.6"
   }
 }
