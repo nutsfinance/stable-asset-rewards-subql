@@ -1,0 +1,49 @@
+type Account @entity {
+  id: ID! # user address
+  claimTxs: [ClaimTx]! @derivedFrom(field: "account")
+  claims: [Claim]! @derivedFrom(field: "account")
+
+  claimTxCount: Int!
+  claimCount: Int!
+  tokenClaimed: [AccountTokenClaimed]! @derivedFrom(field: "account")
+}
+
+type AccountTokenClaimed @entity {
+  id: ID! #account-token
+  account: Account!
+  token: String!
+  amount: BigInt!
+}
+
+type Distributor @entity {
+  id: ID! # contract address
+  dailyStats: [DistributorDailyStat]! @derivedFrom(field: "distributor")
+}
+
+type DistributorDailyStat @entity {
+  id: ID! # contractAddress-timestamp
+  distributor: Distributor!
+  startOfDay: BigInt!
+  txCount: Int!
+  claimCount: Int!
+  txs: [ClaimTx]! @derivedFrom(field: "dailyStats")
+  claims: [Claim]! @derivedFrom(field: "dailyStats")
+}
+
+type ClaimTx @entity {
+  id: ID! # txHash
+  distributor: Distributor!
+  dailyStats: DistributorDailyStat!
+  account: Account!
+  claims: [Claim]! @derivedFrom(field: "claimTx")
+}
+
+type Claim @entity {
+  id: ID! # txHash-logIndex
+  claimTx: ClaimTx!
+  dailyStats: DistributorDailyStat!
+  logIndex: Int!
+  account: Account!
+  token: String!
+  amount: BigInt!
+}
