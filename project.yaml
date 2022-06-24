@@ -39,3 +39,45 @@ dataSources:
               - null
               - null
               - null
+  - kind: substrate/AcalaEvm
+    startBlock: 2027100
+    processor:
+      file: ./dist/acalaEvm.js
+      options:
+        abi: merkleDistributor
+        address: '0xf595F4a81B27E5CC1Daca349A69c834f375224F4'
+    assets:
+      merkleDistributor:
+        file: ./merkleDistributor.abi.json
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleClaim
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - 'Claimed(bytes32 indexed user,address userAddress,address indexed token,uint256 amount,uint256 indexed cycle,uint256 timestamp,uint256 blockNumber,address claimer)'
+              - null
+              - null
+              - null
+  - kind: substrate/AcalaEvm
+    startBlock: 2118800
+    processor:
+      file: ./dist/acalaEvm.js
+      options:
+        abi: merkleDistributor
+        address: '0xff066331be693BE721994CF19905b2DC7475C5c9'
+    assets:
+      merkleDistributor:
+        file: ./merkleDistributor.abi.json
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleClaim
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - 'Claimed(bytes32 indexed user,address userAddress,address indexed token,uint256 amount,uint256 indexed cycle,uint256 timestamp,uint256 blockNumber,address claimer)'
+              - null
+              - null
+              - null
