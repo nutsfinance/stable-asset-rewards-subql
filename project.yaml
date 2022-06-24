@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 name: stable-asset-subql-v2
-version: 0.0.0
+version: 0.0.1
 runner:
   node:
     name: '@subql/node'
