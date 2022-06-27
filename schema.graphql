@@ -2,15 +2,19 @@ type Account @entity {
   id: ID! # user address
   claimTxs: [ClaimTx]! @derivedFrom(field: "account")
   claims: [Claim]! @derivedFrom(field: "account")
-
-  claimTxCount: Int!
-  claimCount: Int!
   tokenClaimed: [AccountTokenClaimed]! @derivedFrom(field: "account")
 }
 
 type AccountTokenClaimed @entity {
   id: ID! #account-token
   account: Account!
+  token: String!
+  amount: BigInt!
+}
+
+type DailyTokenClaimed @entity {
+  id: ID! #account-token
+  dailyStats: DistributorDailyStat!
   token: String!
   amount: BigInt!
 }
@@ -24,10 +28,9 @@ type DistributorDailyStat @entity {
   id: ID! # contractAddress-timestamp
   distributor: Distributor!
   startOfDay: BigInt!
-  txCount: Int!
-  claimCount: Int!
   txs: [ClaimTx]! @derivedFrom(field: "dailyStats")
   claims: [Claim]! @derivedFrom(field: "dailyStats")
+  totalClaimed: [DailyTokenClaimed]! @derivedFrom(field: "dailyStats")
 }
 
 type ClaimTx @entity {

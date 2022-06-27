@@ -1,4 +1,4 @@
-import { AcalaEvmEvent } from '@subql/acala-evm-processor';
+import { AcalaEvmCall, AcalaEvmEvent } from '@subql/acala-evm-processor';
 import { claim } from '../handlers';
 import { TransferEventArgs } from '../utils';
 
@@ -8,4 +8,3 @@ import { TransferEventArgs } from '../utils';
 export async function handleClaim(event: AcalaEvmEvent<TransferEventArgs>): Promise<void> {
     return await claim(event);
 }
-

@@ -1,9 +1,8 @@
 import {
-	Account, ClaimTx, Claim, Distributor, DistributorDailyStat
+	Account, ClaimTx, Claim, Distributor, DistributorDailyStat, AccountTokenClaimed, DailyTokenClaimed
 } from "../types";
 import { BigNumber } from "ethers";
 import { isAddressEqual } from "./address";
-import { AccountTokenClaimed } from "../types/models/AccountTokenClaimed";
 
 export type TransferEventArgs = [
     string,
@@ -31,8 +30,6 @@ export const getOrCreateAccount = async (address: string) => {
 	const _account = await Account.get(address);
 	if (!_account) {
 		const newAccount = new Account(address);
-		newAccount.claimTxCount = 0;
-		newAccount.claimCount = 0;
 		await newAccount.save();
 		return newAccount;
 	} else {
@@ -59,7 +56,7 @@ export const getClaimTx = async (account: Account, distributor: Distributor, dai
 } 
 
 export const createClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string) => {
-	logger.info("createClaimTx")
+	logger.info(`createClaimTx ${txHash}`)
 
 	const newClaimTx = new ClaimTx(txHash);
 	newClaimTx.accountId = account.id;
@@ -73,7 +70,7 @@ export const getOrCreateClaim = async (claimTx: ClaimTx, dailyStats: Distributor
 	logger.info("getOrCreateClaim")
 
 	const id = `${claimTx.id}-${logIndex}`;
-	logger.info("Claim: {}", [id])
+	logger.info(`Claim: ${id}`)
 
 
 	const _claim = await Claim.get(id);
@@ -102,8 +99,6 @@ export const getOrCreateDistributorDailyStat = async (distributor: Distributor, 
 		const newDailyStat = new DistributorDailyStat(id);
 		newDailyStat.distributorId = distributor.id;
 		newDailyStat.startOfDay = BigInt(timestamp);
-		newDailyStat.txCount = 0;
-		newDailyStat.claimCount = 0;
 		await newDailyStat.save();
 		return newDailyStat;
 	} else {
@@ -119,6 +114,21 @@ export const createAccountTokenClaimed = async (account: Account, token: string,
 	logger.info("createAccountTokenClaimed")
 	const newTokenClaimed = new AccountTokenClaimed(`${account.id}-${token}`);
 	newTokenClaimed.accountId = account.id;
+	newTokenClaimed.token = token;
+	newTokenClaimed.amount = amount.toBigInt();
+	await newTokenClaimed.save();
+	return newTokenClaimed;
+};
+
+
+export const getDailyTokenClaimed = async (stats: DistributorDailyStat, token: string) => {
+	logger.info("getDailyTokenClaimed")
+	return await DailyTokenClaimed.get(`${stats.id}-${token}`);
+}
+export const createDailyTokenClaimed = async (stats: DistributorDailyStat, token: string, amount: BigNumber) => {
+	logger.info("createDailyTokenClaimed")
+	const newTokenClaimed = new DailyTokenClaimed(`${stats.id}-${token}`);
+	newTokenClaimed.dailyStatsId = stats.id
 	newTokenClaimed.token = token;
 	newTokenClaimed.amount = amount.toBigInt();
 	await newTokenClaimed.save();
