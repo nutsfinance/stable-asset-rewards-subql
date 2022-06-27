@@ -13,60 +13,18 @@ repository: 'https://github.com/subquery/acala-evm-starter'
 schema:
   file: ./schema.graphql
 network:
-  chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
-  endpoint: 'wss://karura.api.onfinality.io/public-ws'
+  chainId: '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c'
+  endpoint: 'wss://acala-polkadot.api.onfinality.io/public-ws	'
   chaintypes:
     file: ./dist/chaintypes.js
 dataSources:
   - kind: substrate/AcalaEvm
-    startBlock: 2022700
+    startBlock: 1310200
     processor:
       file: ./dist/acalaEvm.js
       options:
         abi: merkleDistributor
-        address: '0x30385059196602A1498F5f8Ef91f3450e3A7B27a'
-    assets:
-      merkleDistributor:
-        file: ./merkleDistributor.abi.json
-    mapping:
-      file: ./dist/index.js
-      handlers:
-        - handler: handleClaim
-          kind: substrate/AcalaEvmEvent
-          filter:
-            topics:
-              - 'Claimed(bytes32 indexed user,address userAddress,address indexed token,uint256 amount,uint256 indexed cycle,uint256 timestamp,uint256 blockNumber,address claimer)'
-              - null
-              - null
-              - null
-  - kind: substrate/AcalaEvm
-    startBlock: 2027100
-    processor:
-      file: ./dist/acalaEvm.js
-      options:
-        abi: merkleDistributor
-        address: '0xf595F4a81B27E5CC1Daca349A69c834f375224F4'
-    assets:
-      merkleDistributor:
-        file: ./merkleDistributor.abi.json
-    mapping:
-      file: ./dist/index.js
-      handlers:
-        - handler: handleClaim
-          kind: substrate/AcalaEvmEvent
-          filter:
-            topics:
-              - 'Claimed(bytes32 indexed user,address userAddress,address indexed token,uint256 amount,uint256 indexed cycle,uint256 timestamp,uint256 blockNumber,address claimer)'
-              - null
-              - null
-              - null
-  - kind: substrate/AcalaEvm
-    startBlock: 2118800
-    processor:
-      file: ./dist/acalaEvm.js
-      options:
-        abi: merkleDistributor
-        address: '0xff066331be693BE721994CF19905b2DC7475C5c9'
+        address: '0x219FA396aE50f789b0cE5e27D6EcbE6b36ef49d9'
     assets:
       merkleDistributor:
         file: ./merkleDistributor.abi.json
