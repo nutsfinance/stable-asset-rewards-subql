@@ -49,19 +49,19 @@ export const getOrCreateDistributor = async (address: string) => {
 	}
 };
 
-export const getClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string) => {
+export const getClaimTx = async (txHash: string) => {
 	logger.info("getClaimTx")
-
 	return await ClaimTx.get(txHash);
 } 
 
-export const createClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string) => {
+export const createClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string, blockTimestamp: number) => {
 	logger.info(`createClaimTx ${txHash}`)
 
 	const newClaimTx = new ClaimTx(txHash);
 	newClaimTx.accountId = account.id;
 	newClaimTx.distributorId = distributor.id;
 	newClaimTx.dailyStatsId = dailyStats.id;
+	newClaimTx.blockTimestamp = BigInt(blockTimestamp);
 	await newClaimTx.save();
 	return newClaimTx;
 };
@@ -90,15 +90,15 @@ export const getOrCreateClaim = async (claimTx: ClaimTx, dailyStats: Distributor
 	}
 };
 
-export const getOrCreateDistributorDailyStat = async (distributor: Distributor, timestamp: number) => {
+export const getOrCreateDistributorDailyStat = async (distributor: Distributor, startOfDay: number) => {
 	logger.info("getOrCreateDistributorDailyStat")
 
-	const id = `${distributor.id}-${timestamp}`;
+	const id = `${distributor.id}-${startOfDay}`;
 	const _dailyStat = await DistributorDailyStat.get(id);
 	if (!_dailyStat) {
 		const newDailyStat = new DistributorDailyStat(id);
 		newDailyStat.distributorId = distributor.id;
-		newDailyStat.startOfDay = BigInt(timestamp);
+		newDailyStat.startOfDay = BigInt(startOfDay);
 		await newDailyStat.save();
 		return newDailyStat;
 	} else {

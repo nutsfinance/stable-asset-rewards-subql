@@ -8,18 +8,11 @@ export const claim = async ({address, blockTimestamp, transactionHash, logIndex,
 	const distributor = await getOrCreateDistributor(address);
     const startOfDay = getStartOfDay(blockTimestamp).getTime()
 	const stats = await getOrCreateDistributorDailyStat(distributor, startOfDay);
-    // stats.claimCount += 1;
-    // await stats.save();
-    // account.claimCount +=1;
-    // await account.save();
 
-	let claimTx = await getClaimTx(account, distributor, stats, transactionHash);
+	let claimTx = await getClaimTx(transactionHash);
     if (!claimTx) {
-        claimTx = await createClaimTx(account, distributor, stats, transactionHash)
-        // stats.txCount += 1;
-        // await stats.save();
-        // account.claimTxCount +=1;
-        // await account.save();
+        const t = blockTimestamp.getTime()
+        claimTx = await createClaimTx(account, distributor, stats, transactionHash, t)
     }
 	await getOrCreateClaim(claimTx, stats, logIndex, userAddress, token, amount);
     const accClaimed = await getAccountTokenClaimed(account, token) || await createAccountTokenClaimed(account, token, amount)

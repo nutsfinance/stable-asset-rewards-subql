@@ -38,6 +38,7 @@ type ClaimTx @entity {
   distributor: Distributor!
   dailyStats: DistributorDailyStat!
   account: Account!
+  blockTimestamp: BigInt!
   claims: [Claim]! @derivedFrom(field: "claimTx")
 }
 
