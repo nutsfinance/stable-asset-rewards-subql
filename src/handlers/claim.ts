@@ -11,8 +11,7 @@ export const claim = async ({address, blockTimestamp, transactionHash, logIndex,
 
 	let claimTx = await getClaimTx(transactionHash);
     if (!claimTx) {
-        const t = blockTimestamp.getTime()
-        claimTx = await createClaimTx(account, distributor, stats, transactionHash, t)
+        claimTx = await createClaimTx(account, distributor, stats, transactionHash, blockTimestamp)
     }
 	await getOrCreateClaim(claimTx, stats, logIndex, userAddress, token, amount);
     const accClaimed = await getAccountTokenClaimed(account, token) || await createAccountTokenClaimed(account, token, amount)

@@ -54,14 +54,14 @@ export const getClaimTx = async (txHash: string) => {
 	return await ClaimTx.get(txHash);
 } 
 
-export const createClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string, blockTimestamp: number) => {
+export const createClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string, blockTimestamp: Date) => {
 	logger.info(`createClaimTx ${txHash}`)
 
 	const newClaimTx = new ClaimTx(txHash);
 	newClaimTx.accountId = account.id;
 	newClaimTx.distributorId = distributor.id;
 	newClaimTx.dailyStatsId = dailyStats.id;
-	newClaimTx.blockTimestamp = BigInt(blockTimestamp);
+	newClaimTx.blockTimestamp = blockTimestamp;
 	await newClaimTx.save();
 	return newClaimTx;
 };
