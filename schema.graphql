@@ -27,7 +27,7 @@ type Distributor @entity {
 type DistributorDailyStat @entity {
   id: ID! # contractAddress-timestamp
   distributor: Distributor!
-  startOfDay: BigInt!
+  startOfDay: Date!
   txs: [ClaimTx]! @derivedFrom(field: "dailyStats")
   claims: [Claim]! @derivedFrom(field: "dailyStats")
   totalClaimed: [DailyTokenClaimed]! @derivedFrom(field: "dailyStats")

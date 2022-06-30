@@ -7,7 +7,7 @@
     "build": "subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
-    "codegen": "./node_modules/.bin/subql codegen"
+    "codegen": "subql codegen"
   },
   "homepage": "https://github.com/subquery/tutorials-frontier-evm-starter",
   "repository": "github:subquery/tutorials-frontier-evm-starter",

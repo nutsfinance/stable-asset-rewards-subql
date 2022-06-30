@@ -6,7 +6,7 @@ import { getStartOfDay } from "../utils";
 export const claim = async ({address, blockTimestamp, transactionHash, logIndex, args: {userAddress, token, amount}}: AcalaEvmEvent<TransferEventArgs>) => {
 	const account = await getOrCreateAccount(userAddress);
 	const distributor = await getOrCreateDistributor(address);
-    const startOfDay = getStartOfDay(blockTimestamp).getTime()
+    const startOfDay = getStartOfDay(blockTimestamp)
 	const stats = await getOrCreateDistributorDailyStat(distributor, startOfDay);
 
 	let claimTx = await getClaimTx(transactionHash);
