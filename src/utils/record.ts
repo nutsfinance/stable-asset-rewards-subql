@@ -51,7 +51,6 @@ export const getOrCreateDistributor = async (address: string) => {
 
 export const getClaimTx = async (txHash: string) => {
 	logger.info("getClaimTx")
-
 	return await ClaimTx.get(txHash);
 } 
 
@@ -91,15 +90,15 @@ export const getOrCreateClaim = async (claimTx: ClaimTx, dailyStats: Distributor
 	}
 };
 
-export const getOrCreateDistributorDailyStat = async (distributor: Distributor, startOfDay: number) => {
+export const getOrCreateDistributorDailyStat = async (distributor: Distributor, startOfDay: Date) => {
 	logger.info("getOrCreateDistributorDailyStat")
 
-	const id = `${distributor.id}-${startOfDay}`;
+	const id = `${distributor.id}-${startOfDay.getTime()}`;
 	const _dailyStat = await DistributorDailyStat.get(id);
 	if (!_dailyStat) {
 		const newDailyStat = new DistributorDailyStat(id);
 		newDailyStat.distributorId = distributor.id;
-		newDailyStat.startOfDay = BigInt(startOfDay);
+		newDailyStat.startOfDay = startOfDay;
 		await newDailyStat.save();
 		return newDailyStat;
 	} else {
