@@ -82,9 +82,8 @@ export const createClaim = async (claimTx: ClaimTx, dailyStats: DistributorDaily
 };
 
 export const getDistributorDailyStat = async (distributor: Distributor, startOfDay: Date) => {
-	logger.info("getOrCreateDistributorDailyStat")
-
 	const id = `${distributor.id}-${startOfDay.getTime()}`;
+	
 	const dailyStat = await DistributorDailyStat.get(id);
 	if (!dailyStat) {
 		const newDailyStat = new DistributorDailyStat(id);
