@@ -2,7 +2,6 @@ import {
 	Account, ClaimTx, Claim, Distributor, DistributorDailyStat, AccountTokenClaimed, DailyTokenClaimed
 } from "../types";
 import { BigNumber } from "ethers";
-import { isAddressEqual } from "./address";
 
 export type TransferEventArgs = [
     string,
@@ -67,7 +66,6 @@ export const createClaim = async (claimTx: ClaimTx, dailyStats: DistributorDaily
 	logger.info(`Claim: ${id}`)
 
 	const _claim = await Claim.get(id);
-	if (!isAddressEqual(claimTx.accountId, userAddress)) throw new Error("user address conflict")
 	if (!_claim) {
 		const newClaim = new Claim(id);
 		newClaim.claimTxId = claimTx.id;
