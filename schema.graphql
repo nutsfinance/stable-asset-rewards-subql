@@ -1,5 +1,6 @@
 type Account @entity {
-  id: ID! # user address
+  id: ID! # user account(Polkadot address)
+  userAddress: String! # EVM address
   claimTxs: [ClaimTx]! @derivedFrom(field: "account")
   claims: [Claim]! @derivedFrom(field: "account")
   tokenClaimed: [AccountTokenClaimed]! @derivedFrom(field: "account")
