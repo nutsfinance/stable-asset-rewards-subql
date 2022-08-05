@@ -39,7 +39,7 @@ type ClaimTx @entity {
   distributor: Distributor!
   dailyStats: DistributorDailyStat!
   account: Account!
-  blockTimestamp: Date!
+  block: Block!
   claims: [Claim]! @derivedFrom(field: "claimTx")
 }
 
@@ -51,4 +51,12 @@ type Claim @entity {
   account: Account!
   token: String!
   amount: BigInt!
+}
+
+type Block @entity {
+  id: ID! # block number
+  hash: String
+  timestamp: Date
+
+  claimTxs: [ClaimTx]! @derivedFrom(field: "block")
 }

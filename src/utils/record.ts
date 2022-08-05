@@ -1,9 +1,9 @@
 import {
-	Account, ClaimTx, Claim, Distributor, DistributorDailyStat, AccountTokenClaimed, DailyTokenClaimed
+	Account, ClaimTx, Claim, Distributor, DistributorDailyStat, AccountTokenClaimed, DailyTokenClaimed, Block
 } from "../types";
 import { BigNumber } from "ethers";
 
-export type TransferEventArgs = [
+export type ClaimEventArgs = [
     string,
     string,
     string,
@@ -46,14 +46,29 @@ export const getDistributor = async (address: string) => {
 	}
 };
 
-export const getClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string, blockTimestamp: Date) => {
+export const getBlock = async (blockNumber: number, blockHash: string, blockTimestamp: Date) => {
+	const _id = `${blockNumber}`;
+	const _block = await Block.get(_id);
+	if (!_block) {
+		const newBlock = new Block(_id);
+		newBlock.hash = blockHash;
+		newBlock.timestamp = blockTimestamp;
+		await newBlock.save();
+
+		return newBlock;
+	} else {
+		return _block;
+	}
+}
+
+export const getClaimTx = async (account: Account, distributor: Distributor, dailyStats: DistributorDailyStat, txHash: string, blockId: string) => {
 	const _claimTx = await ClaimTx.get(txHash);
 	if (!_claimTx) {
 		const newClaimTx = new ClaimTx(txHash);
 		newClaimTx.accountId = account.id;
 		newClaimTx.distributorId = distributor.id;
 		newClaimTx.dailyStatsId = dailyStats.id;
-		newClaimTx.blockTimestamp = blockTimestamp;
+		newClaimTx.blockId = blockId;
 		await newClaimTx.save();
 		return newClaimTx;
 	} else {
