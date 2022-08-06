@@ -1,15 +1,16 @@
-import { getAccount, createClaim, TransferEventArgs, getDistributor, getDistributorDailyStat, getClaimTx, getAccountTokenClaimed, getDailyTokenClaimed } from "../utils/record";
+import { getAccount, createClaim, ClaimEventArgs, getDistributor, getDistributorDailyStat, getClaimTx, getAccountTokenClaimed, getDailyTokenClaimed, getBlock } from "../utils/record";
 import { AcalaEvmEvent } from '@subql/acala-evm-processor';
 import { getStartOfDay } from "../utils";
 
 // Ensures extrinsic data is populated
-export const claim = async ({address, blockTimestamp, transactionHash, logIndex, args: {user, userAddress, token, amount}}: AcalaEvmEvent<TransferEventArgs>) => {
+export const claim = async ({address, blockHash, blockNumber, blockTimestamp, transactionHash, logIndex, args: {user, userAddress, token, amount}}: AcalaEvmEvent<ClaimEventArgs>) => {
 	const account = await getAccount(user, userAddress);
 	const distributor = await getDistributor(address);
     const startOfDay = getStartOfDay(blockTimestamp)
 	const stats = await getDistributorDailyStat(distributor, startOfDay);
 
-	let claimTx = await getClaimTx(account, distributor, stats, transactionHash, blockTimestamp);
+    const block = await getBlock(blockNumber, blockHash, blockTimestamp);
+	const claimTx = await getClaimTx(account, distributor, stats, transactionHash, block.id);
 	await createClaim(claimTx, stats, logIndex, userAddress, token, amount);
 
     const accClaimed = await getAccountTokenClaimed(account, token);

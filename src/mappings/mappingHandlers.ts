@@ -1,10 +1,10 @@
 import { AcalaEvmCall, AcalaEvmEvent } from '@subql/acala-evm-processor';
 import { claim } from '../handlers';
-import { TransferEventArgs } from '../utils';
+import { ClaimEventArgs } from '../utils';
 
 // Setup types from ABI
 
 
-export async function handleClaim(event: AcalaEvmEvent<TransferEventArgs>): Promise<void> {
+export async function handleClaim(event: AcalaEvmEvent<ClaimEventArgs>): Promise<void> {
     return await claim(event);
 }
