@@ -76,7 +76,7 @@ export const getClaimTx = async (account: Account, distributor: Distributor, dai
 	}
 } 
 
-export const createClaim = async (claimTx: ClaimTx, dailyStats: DistributorDailyStat, logIndex: number, userAddress: string, token: string, amount: BigNumber) => {
+export const createClaim = async (claimTx: ClaimTx, dailyStats: DistributorDailyStat, logIndex: number, userAddress: string, token: string, amount: BigNumber, timestamp: Date) => {
 	const id = `${claimTx.id}-${logIndex}`;
 	logger.info(`Claim: ${id}`)
 
@@ -89,6 +89,7 @@ export const createClaim = async (claimTx: ClaimTx, dailyStats: DistributorDaily
 		newClaim.accountId = claimTx.accountId;
 		newClaim.token = token;
 		newClaim.amount = amount.toBigInt();
+		newClaim.timestamp = timestamp;
 		await newClaim.save();
 		return newClaim;
 	} else {

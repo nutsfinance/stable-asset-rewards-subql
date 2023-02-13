@@ -51,6 +51,7 @@ type Claim @entity {
   account: Account!
   token: String!
   amount: BigInt!
+  timestamp: Date
 }
 
 type Block @entity {

@@ -11,7 +11,7 @@ export const claim = async ({address, blockHash, blockNumber, blockTimestamp, tr
 
     const block = await getBlock(blockNumber, blockHash, blockTimestamp);
 	const claimTx = await getClaimTx(account, distributor, stats, transactionHash, block.id);
-	await createClaim(claimTx, stats, logIndex, userAddress, token, amount);
+	await createClaim(claimTx, stats, logIndex, userAddress, token, amount, blockTimestamp);
 
     const accClaimed = await getAccountTokenClaimed(account, token);
     accClaimed.amount += amount.toBigInt();
